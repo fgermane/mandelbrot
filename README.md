@@ -1,4 +1,4 @@
-# mandelbrot
+# Mandelbrot
 Draw Mandelbrot set with a simple web page
 
 ![Mandelbrot](mandelbrot.png "Mandelbrot")
@@ -36,5 +36,5 @@ n max is equal to: ```n_max = 10 * (layers - startLayer)```
 
 (Rem: c is equal to zero in that version as we want to displat the 'classical' Mandelbrot set ;-))
 
-## Dependicies
+## Dependencies
 Google jQuery is used for mouse interactions.
