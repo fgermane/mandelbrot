@@ -32,7 +32,11 @@ var layers = 3; // number of figures to draw
 var startLayer = 1; // starting layer
 ```
 
-n max is equal to: ```n_max = 10 * (layers - startLayer)```
+The number of iterations per layer is n: 
+```
+n_min = 10 * startLayer
+n_max = 10 * (layers - startLayer)
+```
 
 (Rem: c is equal to zero in that version as we want to display the 'classical' Mandelbrot set ;-))
 
