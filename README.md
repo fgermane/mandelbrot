@@ -1,7 +1,9 @@
 # Mandelbrot
-Draw Mandelbrot set with a simple web page
+Draw Mandelbrot set with a simple web page.
 
 ![Mandelbrot](mandelbrot.png "Mandelbrot")
+
+Inspired by the great Youtuber Michael Launey : https://youtu.be/dQeIUrLKM9s
 
 ## How to launch
 Simply open the mandelbrot.html file in your favorite browser.
@@ -34,8 +36,8 @@ var startLayer = 1; // starting layer
 
 The number of iterations per layer is n: 
 ```
-n_min = 10 * startLayer
-n_max = 10 * (layers - startLayer)
+for the 1st layer: n_max = 10 * startLayer
+for the last layer: n_max = 10 * (layers - startLayer)
 ```
 
 (Rem: c is equal to zero in that version as we want to display the 'classical' Mandelbrot set ;-))
