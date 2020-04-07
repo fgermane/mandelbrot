@@ -6,7 +6,7 @@ Draw Mandelbrot set with a simple web page
 ## How to launch
 Simply open the mandelbrot.html file in your favorite browser.
 
-You can zoom in by selected a zoom rectangle by clicking and releasing the mouse.
+You can zoom in by drawing a zoom rectangle with the mouse (down and up).
 
 ## Parameters
 If you want to play with the rendering (increase or decrease precision, etc.), here are the set of parameters within the html file:
