@@ -17,17 +17,19 @@ var ymin = -1.25; // smallest y axis value
 var ymax = 1.25; // smallest x axis value
 ```
 
-Spefici parameters of the Mandelbrot series computation:
+Specific parameters of the Mandelbrot series computation:
+
+Taking into account the series:
+z(n) = z(n-1)^2 + c
+
 ```javascript
 var threshold = 100; // limit value of z where we consider the series as divergent
 var layers = 3; // number of figures to draw
 var startLayer = 1; // starting layer
 ```
-Taking into account the series:
-z(n) = z(n-1)^2 + c
 
 n max is equal to: ```10 * (layers - startLayer)```
 
 
 ## Dependicies
-jquery only
+Google jQuery is used for mouse interactions.
