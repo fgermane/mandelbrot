@@ -3,7 +3,7 @@ Draw Mandelbrot set with a simple web page.
 
 ![Mandelbrot](mandelbrot.png "Mandelbrot")
 
-Inspired by the great Youtuber Michael Launey : https://youtu.be/dQeIUrLKM9s
+Inspired by the great math youtuber Michaël Launay : https://youtu.be/dQeIUrLKM9s
 
 ## How to launch
 Simply open the mandelbrot.html file in your favorite browser.
