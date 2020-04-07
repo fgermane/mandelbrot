@@ -20,9 +20,9 @@ var ymax = 1.25; // smallest x axis value
 Specific parameters of the Mandelbrot series computation:
 
 Taking into account the series:
-```math
+``
 z(n) = z(n-1)^2 + c
-```
+``
 
 ```javascript
 var threshold = 100; // limit value of z where we consider the series as divergent
