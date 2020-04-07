@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <canvas id="myCanvas" width="1000" height="600" style="border:1px solid #d3d3d3; position: absolute;"></canvas>
+        <canvas id="testCanvas" width="1000" height="600" style="border:1px solid #d3d3d3; position: absolute; cursor: zoom-in;"></canvas>
+    </div>
+    <div id="debug" style="position: absolute; top: 620px;">
+        x: <input id="show-x" type="text">
+        y: <input id="show-y" type="text">
+    </div>
+</body>
+
+<script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+
+    var c2 = document.getElementById("testCanvas");
+    var ctx2 = c2.getContext("2d");
+
+    var widthPx = c.width;
+    var heightPx = c.height;
+    var xmin = -2.5;
+    var xmax = 0.75;
+    var ymin = -1.25;
+    var ymax = 1.25;
+    var pointSize = 1;
+    var pointSizePixelX = pointSize;
+    var pointSizePixelY = pointSize;
+    var threshold = 100;
+    var layers = 3;
+    var startLayer = 1;
+
+    // Main entry
+
+    letStartTheMagic();
+
+    function letStartTheMagic() {
+        var deltaX = getDeltaMatchingPixelX();
+        var deltaY = getDeltaMatchingPixelY();
+        ctx.clearRect(0, 0, widthPx, heightPx);
+        ctx2.clearRect(0, 0, widthPx, heightPx);
+        for (var i = startLayer; i <= startLayer + layers; i++) {
+            var ratio = (i - startLayer) / layers;
+            console.log("Computing ... " + ratio + "/1");
+            var color = getColorFromGradient(ratio);
+            drawMandelbrot(10 * i, deltaX, deltaY, color);
+            //ctx.stroke();
+        }
+        drawAxes();
+        console.log("Computing finished");
+    }
+
+    // Complex
+
+    function add(c1, c2) {
+        return [c1[0] + c2[0], c1[1] + c2[1]];
+    }
+
+    function mult(c1, c2) {
+        return [c1[0] * c2[0] - c1[1] * c2[1], c1[0] * c2[1] + c1[1] * c2[0]];
+    }
+
+    function dist(c) {
+        return Math.sqrt(c[0] * c[0] + c[1] * c[1]);
+    }
+
+    function mandel(c, k) {
+        return add(mult(c, c), k);
+    }
+
+    function series(c, k, n) {
+        for (var i = 0; i < n; i++) {
+            c = mandel(c, k);
+        }
+        return c;
+    }
+
+    function drawMandelbrot(n, deltaX, deltaY, color) {
+        var tmp;
+        for (var x = xmin; x < xmax; x += deltaX) {
+            for (var y = ymin; y < ymax; y += deltaY) {
+                tmp = series([0, 0], [x, y], n);
+                if (dist(tmp) < threshold) {
+                    plot(x, y, color);
+                }
+            }
+        }
+    }
+
+    // Graphics
+
+    function plot(x, y, color) {
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.ellipse(xToPixel(x), yToPixel(y), pointSizePixelX, pointSizePixelY, 0, Math.PI * 2, false);
+        ctx.fill();
+    }
+
+    function plot2(x, y, color) {
+        ctx2.beginPath();
+        ctx2.fillStyle = color;
+        ctx2.ellipse(xToPixel(x), yToPixel(y), pointSizePixelX, pointSizePixelY, 0, Math.PI * 2, false);
+        ctx2.fill();
+    }
+
+    function drawAxes() {
+        ctx.beginPath();
+        ctx.moveTo(0, yToPixel(0));
+        ctx.lineTo(xToPixel(xmax), yToPixel(0));
+        ctx.moveTo(xToPixel(0), yToPixel(ymin));
+        ctx.lineTo(xToPixel(0), yToPixel(ymax));
+        ctx.stroke();
+        drawScale();
+    }
+
+    function drawScale() {
+        var dashSize = 5;
+        ctx.beginPath();
+        for (x = Math.ceil(xmin); x <= Math.floor(xmax); x++) {
+            ctx.moveTo(xToPixel(x), yToPixel(0) - dashSize);
+            ctx.lineTo(xToPixel(x), yToPixel(0) + dashSize);
+        }
+        for (y = Math.ceil(ymin); y <= Math.floor(ymax); y++) {
+            ctx.moveTo(xToPixel(0) - dashSize, yToPixel(y));
+            ctx.lineTo(xToPixel(0) + dashSize, yToPixel(y));
+        }
+        ctx.stroke();
+    }
+
+    function rect2(x0, y0, x1, y1) {
+        ctx2.clearRect(0, 0, widthPx, heightPx);
+        ctx2.strokeStyle = "grey";
+        origX = xToPixel(x0);
+        origY = yToPixel(y0);
+        width = xToPixel(x1) - origX;
+        height = (yToPixel(y1) - origY);
+        ctx2.strokeRect(origX, origY, width, height);
+    }
+
+    function rectPixel(px0, py0, px1, py1) {
+        ctx.beginPath();
+        ctx.strokeStyle = "grey";
+        width = px1 - px0;
+        height = py1 - py0;
+        ctx.strokeRect(px0, py0, width, height);
+    }
+
+    function xToPixel(x) {
+        return widthPx * (x - xmin) / (xmax - xmin);
+    }
+
+    function yToPixel(y) {
+        return heightPx - heightPx * (y - ymin) / (ymax - ymin);
+    }
+
+    function pixelToX(px) {
+        return (px * (xmax - xmin) / widthPx) + xmin;
+    }
+
+    function pixelToY(py) {
+        return ymin - ((py - heightPx) * (ymax - ymin) / heightPx);
+    }
+
+    function getDeltaMatchingPixelX() {
+        return (xmax - xmin) / widthPx;
+    }
+
+    function getDeltaMatchingPixelY() {
+        return (ymax - ymin) / heightPx;
+    }
+
+    function getColorFromGradient(ratio) {
+        var color = "rgb(0,0," + Math.floor(255 - (255 * ratio)) + ")";
+        if (ratio >= 0.6) {
+            color = "rgb(0," + Math.floor(255 * ratio) + ",0)";
+        }
+        if (ratio >= 0.9) {
+            color = "rgb(" + Math.floor(255 * ratio) + ",0,0)";
+        }
+        return color;
+    }
+
+    // Mouse interactions with jQuery
+
+    var downX, downY, upX, upY;
+    var mousedown = false;
+
+    $(document).ready(function () {
+        console.log("I am here!");
+        $("#testCanvas").mousemove(function (event) {
+            x = pixelToX(event.pageX);
+            y = pixelToY(event.pageY);
+            $("#show-x").val(x);
+            $("#show-y").val(y);
+            if (mousedown) {
+                rect2(downX, downY, x, y);
+            }
+        });
+        $("#testCanvas").mousedown(function () {
+            mousedown = true;
+            downX = pixelToX(event.pageX);
+            downY = pixelToY(event.pageY);
+        });
+        $("#testCanvas").mouseup(function () {
+            mousedown = false;
+            upX = pixelToX(event.pageX);
+            upY = pixelToY(event.pageY);
+            xmin = Math.min(upX, downX);
+            ymin = Math.min(upY, downY);
+            xmax = Math.max(upX, downX);
+            ymax = Math.max(upY, downY);
+            letStartTheMagic();
+        });
+    });
+
+</script>
+
+</html>
