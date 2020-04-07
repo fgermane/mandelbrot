@@ -29,7 +29,7 @@ z(n) = z(n-1)^2 + c
 ``
 
 ```javascript
-var threshold = 100; // limit value of z where we consider the series as divergent
+var threshold = 100; // limit value of z distance to (0,0) where we consider the series as divergent
 var layers = 3; // number of figures to draw
 var startLayer = 1; // starting layer
 ```
