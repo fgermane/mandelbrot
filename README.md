@@ -30,8 +30,9 @@ var layers = 3; // number of figures to draw
 var startLayer = 1; // starting layer
 ```
 
-n max is equal to: ```10 * (layers - startLayer)```
+n max is equal to: ```n_max = 10 * (layers - startLayer)```
 
+(Rem: c is equal to zero in that version as we want to displat the 'classical' Mandelbrot set ;-))
 
 ## Dependicies
 Google jQuery is used for mouse interactions.
